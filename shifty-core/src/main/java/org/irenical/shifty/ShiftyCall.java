@@ -1,8 +1,10 @@
 package org.irenical.shifty;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
+
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
@@ -34,10 +36,10 @@ public class ShiftyCall<API, RETURN> {
     return getHystrixCommand(call).execute();
   }
 
-  private <ERROR extends Exception> HystrixCommand<RETURN> getHystrixCommand(ShiftyMethod<API, RETURN, ERROR> call) {
+  private <ERROR extends Exception> HystrixCommand<RETURN> getHystrixCommand(final ShiftyMethod<API, RETURN, ERROR> call) {
     int timeout = (int) conf.getTimeoutMillis();
     timeout = timeout == 0 ? 100000 : timeout;
-    HystrixCommand<RETURN> command = new HystrixCommand<RETURN>(HystrixCommandGroupKey.Factory.asKey(shifty.getName()),timeout) {
+    return new HystrixCommand<RETURN>(HystrixCommandGroupKey.Factory.asKey(shifty.getName()),timeout) {
 
       @Override
       protected RETURN run() throws Exception {
@@ -54,15 +56,23 @@ public class ShiftyCall<API, RETURN> {
         }
       }
     };
-    return command;
   }
 
-  public <ERROR extends Exception> Future<RETURN> async(ShiftyMethod<API, RETURN, ERROR> call) {
-    return shifty.getExecutor().submit(() -> call.apply(shifty.getAPI()));
+  public <ERROR extends Exception> Future<RETURN> async(final ShiftyMethod<API, RETURN, ERROR> call) {
+    return shifty.getExecutor().submit(new Callable<RETURN>() {
+      @Override
+      public RETURN call() throws Exception {
+        return call.apply(shifty.getAPI());
+      }
+    });
   }
 
-  public void async(Consumer<API> call) {
-    shifty.getExecutor().execute(() -> call.accept(shifty.getAPI()));
+  public void async(final Predicate<API> call) {
+    shifty.getExecutor().execute(new Runnable() {
+      @Override
+      public void run() {
+        call.apply(shifty.getAPI());
+      }
+    });
   }
-
 }

@@ -1,6 +1,6 @@
 package org.irenical.shifty;
 
-import java.util.function.Supplier;
+import com.google.common.base.Supplier;
 
 public class ShiftyConfiguration<RETURN> {
 

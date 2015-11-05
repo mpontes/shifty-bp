@@ -1,10 +1,11 @@
 package org.irenical.shifty;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class Shifty<API> {
   
@@ -59,7 +60,7 @@ public class Shifty<API> {
     return new ShiftyCall<>(this, new ShiftyConfiguration<RETURN>()).async(call);
   }
 
-  public void async(Consumer<API> call) {
+  public void async(Predicate<API> call) {
     new ShiftyCall<>(this, new ShiftyConfiguration<>()).async(call);
   }
 
