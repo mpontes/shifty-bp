@@ -8,10 +8,6 @@ public class ShiftyTimeout extends Exception {
     super();
   }
 
-  public ShiftyTimeout(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
-
   public ShiftyTimeout(String message, Throwable cause) {
     super(message, cause);
   }

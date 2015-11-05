@@ -23,13 +23,13 @@ public class ShiftyCall<API, RETURN> {
   public ShiftyCall<API, RETURN> withFallback(Supplier<RETURN> fallback) {
     ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<RETURN>(this.conf);
     conf.setFallback(fallback);
-    return new ShiftyCall<>(shifty, conf);
+    return new ShiftyCall<API, RETURN>(shifty, conf);
   }
 
   public ShiftyCall<API, RETURN> withTimeout(long timeoutMillis) {
     ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<RETURN>(this.conf);
     conf.setTimeoutMillis(timeoutMillis);
-    return new ShiftyCall<>(shifty, conf);
+    return new ShiftyCall<API, RETURN>(shifty, conf);
   }
 
   public <ERROR extends Exception> RETURN call(ShiftyMethod<API, RETURN, ERROR> call) throws ERROR {

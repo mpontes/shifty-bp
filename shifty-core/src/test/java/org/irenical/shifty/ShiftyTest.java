@@ -11,7 +11,7 @@ public class ShiftyTest {
 
   @Test(expected = ShiftyException.class)
   public void testNoConnector() throws Exception {
-    Shifty<MyUnstableApi> shifty = new Shifty<>(null);
+    Shifty<MyUnstableApi> shifty = new Shifty<MyUnstableApi>(null);
     shifty.call(new ShiftyMethod<MyUnstableApi, String, Exception>() {
       @Override
       public String apply(MyUnstableApi api) {
@@ -22,7 +22,7 @@ public class ShiftyTest {
 
   @Test
   public void testSimpleCall() throws InterruptedException, ExecutionException {
-    Shifty<MyUnstableApi> shifty = new Shifty<>(new Supplier<MyUnstableApi>() {
+    Shifty<MyUnstableApi> shifty = new Shifty<MyUnstableApi>(new Supplier<MyUnstableApi>() {
       @Override
       public MyUnstableApi get() {
         return new MyUnstableApi(3000);
@@ -40,7 +40,7 @@ public class ShiftyTest {
   
   @Test
   public void testSlowCall() throws InterruptedException, ExecutionException {
-    Shifty<MyUnstableApi> shifty = new Shifty<>(new Supplier<MyUnstableApi>() {
+    Shifty<MyUnstableApi> shifty = new Shifty<MyUnstableApi>(new Supplier<MyUnstableApi>() {
       @Override
       public MyUnstableApi get() {
         return new MyUnstableApi(3000);

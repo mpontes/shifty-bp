@@ -41,27 +41,27 @@ public class Shifty<API> {
   }
 
   public <RETURN> ShiftyCall<API, RETURN> withFallback(Supplier<RETURN> fallback) {
-    ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<>();
+    ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<RETURN>();
     conf.setFallback(fallback);
-    return new ShiftyCall<>(this, conf);
+    return new ShiftyCall<API, RETURN>(this, conf);
   }
 
   public <RETURN> ShiftyCall<API, RETURN> withTimeout(long timeoutMillis) {
-    ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<>();
+    ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<RETURN>();
     conf.setTimeoutMillis(timeoutMillis);
-    return new ShiftyCall<>(this, conf);
+    return new ShiftyCall<API, RETURN>(this, conf);
   }
 
   public <RETURN, ERROR extends Exception> RETURN call(ShiftyMethod<API, RETURN, ERROR> call) throws ERROR {
-    return new ShiftyCall<>(this, new ShiftyConfiguration<RETURN>()).call(call);
+    return new ShiftyCall<API, RETURN>(this, new ShiftyConfiguration<RETURN>()).call(call);
   }
 
   public <RETURN, ERROR extends Exception> Future<RETURN> async(ShiftyMethod<API, RETURN, ERROR> call) throws ERROR {
-    return new ShiftyCall<>(this, new ShiftyConfiguration<RETURN>()).async(call);
+    return new ShiftyCall<API, RETURN>(this, new ShiftyConfiguration<RETURN>()).async(call);
   }
 
   public void async(Predicate<API> call) {
-    new ShiftyCall<>(this, new ShiftyConfiguration<>()).async(call);
+    new ShiftyCall<API, Object>(this, new ShiftyConfiguration<Object>()).async(call);
   }
 
   protected API getAPI() {
