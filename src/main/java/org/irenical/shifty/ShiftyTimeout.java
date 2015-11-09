@@ -19,5 +19,5 @@ public class ShiftyTimeout extends Exception {
   public ShiftyTimeout(Throwable cause) {
     super(cause);
   }
-  
+
 }

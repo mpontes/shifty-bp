@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Shifty<API> {
-  
+
   private ExecutorService executorService;
 
   private Supplier<API> supplier;
@@ -35,21 +35,21 @@ public class Shifty<API> {
   public ExecutorService getExecutorService() {
     return executorService;
   }
-  
+
   protected String getName() {
     return supplier.getClass().getName();
   }
 
+  public <RETURN> ShiftyCall<API, RETURN> withAutoClose() {
+    return new ShiftyCall<API, RETURN>(this, new ShiftyConfiguration<RETURN>()).withAutoClose();
+  }
+
   public <RETURN> ShiftyCall<API, RETURN> withFallback(Supplier<RETURN> fallback) {
-    ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<RETURN>();
-    conf.setFallback(fallback);
-    return new ShiftyCall<API, RETURN>(this, conf);
+    return new ShiftyCall<API, RETURN>(this, new ShiftyConfiguration<RETURN>()).withFallback(fallback);
   }
 
   public <RETURN> ShiftyCall<API, RETURN> withTimeout(long timeoutMillis) {
-    ShiftyConfiguration<RETURN> conf = new ShiftyConfiguration<RETURN>();
-    conf.setTimeoutMillis(timeoutMillis);
-    return new ShiftyCall<API, RETURN>(this, conf);
+    return new ShiftyCall<API, RETURN>(this, new ShiftyConfiguration<RETURN>()).withTimeout(timeoutMillis);
   }
 
   public <RETURN, ERROR extends Exception> RETURN call(ShiftyMethod<API, RETURN, ERROR> call) throws ERROR {

@@ -1,4 +1,4 @@
-# shifty - Java 6+ backport
+# Shifty - Java 6+ backport
 
 ## What for?
 If you have a shady Java object, holding a bunch of methods you don't trust, where anything can go wrong. Instead of trying to wrap method calls in a bunch of try/catch blocks, separate thread, some timeout mechanism and a retry logic, you can use Shifty.
